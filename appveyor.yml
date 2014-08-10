@@ -1,2 +1,5 @@
+build:
+  verbosity: diag
+
 artifacts:
   - path: '**\*.msi'
