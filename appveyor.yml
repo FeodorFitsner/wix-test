@@ -1,3 +1,6 @@
+assembly_info:
+  patch: true
+
 build:
   verbosity: minimal
 
