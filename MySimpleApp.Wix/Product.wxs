@@ -1,30 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="MySimpleApp.Wix" Language="1033" Version="1.0.0.0" Manufacturer="AppVeyor" UpgradeCode="39c6e68e-3b2d-4a40-95dd-241fb0075f17">
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate />
+  <?define PROJECTPATH = "../MySimpleApp"?>
+  <?define BUILDPATH = "$(var.PROJECTPATH)/bin/$(var.BUILD)"?>
+  <?define VERSION="!(bind.FileVersion.MySimpleApp.exe)"?>
 
-		<Feature Id="ProductFeature" Title="MySimpleApp.Wix" Level="1">
-			<ComponentGroupRef Id="ProductComponents" />
-		</Feature>
-	</Product>
+  <Product
+    Id="*"
+    Name="MySimpleApp"
+    Language="1033"
+    Version="$(var.VERSION)"
+    Manufacturer="Appveyor Systems Inc."
+    UpgradeCode="7B14E8C8-502D-4457-AE69-9D23A4AAD947">
 
-	<Fragment>
-		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="MySimpleApp.Wix" />
-			</Directory>
-		</Directory>
-	</Fragment>
+    <Package
+      Id="*"
+      Description="MySimpleApp"
+      Manufacturer="Appveyor Systems Inc."
+      InstallerVersion="200"
+      Compressed="yes"
+      InstallScope="perMachine" />
 
-	<Fragment>
-		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
-			<!-- <Component Id="ProductComponent"> -->
-				<!-- TODO: Insert files, registry keys, and other resources here. -->
-			<!-- </Component> -->
-		</ComponentGroup>
-	</Fragment>
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+    <MajorUpgrade AllowSameVersionUpgrades="yes"
+                  DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
+
+    <Feature Id="ProductFeature" Title="MySimpleApp" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+
+    <!-- UI -->
+    <UIRef Id="WixUI_Minimal" />
+
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="CompanyRootFolder" Name="MySimpleApp">
+          <Directory Id="INSTALLFOLDER" Name="MySimpleApp">
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <!-- Binaries -->
+      <Component Id="ProductFiles" Guid="13221C4A-910E-4121-A9A7-CCFC5253E370">
+        <File Id="MySimpleApp.exe" Source="$(var.BUILDPATH)\MySimpleApp.exe" />
+      </Component>
+
+    </ComponentGroup>
+
+  </Fragment>
 </Wix>

@@ -1,2 +1,5 @@
+build:
+  verbosity: minimal
+
 artifacts:
   - path: '**\*.msi'
