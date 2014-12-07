@@ -3,3 +3,4 @@ build:
 
 artifacts:
   - path: '**\*.msi'
+    name: MyApp
